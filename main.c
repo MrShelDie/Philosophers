@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 21:55:46 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/07 13:05:39 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/07 16:05:35 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,15 @@ static int	parse(int argc, char *const *argv, t_parsed_data *parsed_data)
 	parsed_data->time_to_eat = ft_atoui(argv[3], &err);
 	parsed_data->time_to_sleep = ft_atoui(argv[4], &err);
 	if (argc == 6)
-	{
-		parsed_data->eat_nb = ft_atoui(argv[5], &err);
-		parsed_data->is_eat_nb_defined = true;
-	}
+		parsed_data->eat_nb = (long int)ft_atoui(argv[5], &err);
 	else
-		parsed_data->is_eat_nb_defined = false;
+		parsed_data->eat_nb = UNDEF_EAT_NB;
 	if (err)
 		return (ERROR);
 	return (SUCCESS);
 }
 
-static int	fork_init(t_prime *prime)
+static int	init_fork(t_prime *prime)
 {
 	ssize_t	i;
 	bool	err;
@@ -60,7 +57,31 @@ static int	fork_init(t_prime *prime)
 		prime->forks_destroyed = true;
 		return (ERROR);
 	}
-	prime->forks_destroyed = false;
+	return (SUCCESS);
+}
+
+static int	init_philo(t_parsed_data const *parsed_data, t_prime *prime)
+{
+	ssize_t	i;
+	t_philo	*philo;
+
+	prime->philos = (t_philo *)malloc(sizeof(t_philo) * prime->philo_nb);
+	if (!prime->philos)
+		return (ERROR);
+	i = -1;
+	while (++i < prime->philo_nb)
+	{
+		philo = &prime->philos[i];
+		philo->finish = &prime->finish;
+		philo->forks[i % 2] = &prime->forks[(i + 1) % prime->philo_nb];
+		philo->forks[(i + 1) % 2] = &prime->forks[i];
+		philo->last_eating_sec = -1;
+		philo->last_eating_usec = -1;
+		philo->time_to_die = parsed_data->time_to_die;
+		philo->time_to_eat = parsed_data->time_to_eat;
+		philo->time_to_sleep = parsed_data->time_to_sleep;
+		philo->remain_eat_nb = parsed_data->eat_nb;
+	}
 	return (SUCCESS);
 }
 
@@ -76,6 +97,7 @@ static void	free_prime(t_prime *prime)
 		prime->forks_destroyed = true;
 	}
 	free(prime->forks);
+	free(prime->philos);
 }
 
 int	main(int argc, char **argv)
@@ -88,10 +110,12 @@ int	main(int argc, char **argv)
 		printf("Invalid argument\n");
 		return (0);
 	}
+	prime.finish = false;
+	prime.forks_destroyed = false;
 	prime.philo_nb = parsed_data.philo_nb;
-	if (fork_init(&prime))
+	if (init_fork(&prime) || init_philo(&parsed_data, &prime))
 	{
-		printf("Fork init error\n");
+		printf("Init error\n");
 		return (0);
 	}
 	free_prime(&prime);
