@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 22:09:28 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/07 20:41:32 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/08 02:25:35 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 # define CONTINUE_THREAD 0
 
 # define UNDEF_EAT_NB -1
+# define UNDEF_LAST_EATING_TIME -1
+
 # define ARGC_WITHOUT_EAT_NB 5
 # define ARGC_WITH_EAT_NB 6
 
@@ -44,12 +46,14 @@ typedef struct s_philo
 	bool			*finish;
 	t_mutex			*finish_mutex;
 	t_mutex			*print_mutex;
+	t_mutex			*last_eating_time_mutex;
 	t_mutex			*forks[2];
 	unsigned int	time_to_die;
 	unsigned int	time_to_eat;
 	unsigned int	time_to_sleep;
 	unsigned int	philo_id;
 	long int		last_eating_time;
+	long int		start_time;
 	long int		remain_eat_nb;
 	pthread_t		thread_id;
 }	t_philo;
@@ -65,9 +69,11 @@ typedef struct s_prime
 	t_mutex			*last_eating_time_mutexes;
 	t_philo			*philos;
 	unsigned int	philo_nb;
+	long int		start_time;
 }	t_prime;
 
 unsigned int	ft_atoui(const char *str, bool *err);
-int				delay(unsigned int ms);
+long int		get_curr_time(void);
+void			delay(unsigned int ms);
 
 #endif

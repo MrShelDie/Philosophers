@@ -6,44 +6,39 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 16:36:32 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/07 20:49:16 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/08 02:11:49 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <sys/time.h>
+#include <stdio.h>
+
 #include "philosophers.h"
 
-static int	think(t_philo *arg)
+long int	get_curr_time(void)
 {
-	pthread_mutex_lock(arg->finish_mutex);
-	if (arg->finish)
-	{
-		pthread_mutex_unlock(arg->finish_mutex);
-		return (EXIT_THREAD);
-	}
-	pthread_mutex_lock(arg->print_mutex);
-	// write thinking
-	pthread_mutex_unlock(arg->print_mutex);
-	pthread_mutex_unlock(arg->finish_mutex);
-	return (CONTINUE_THREAD);
+	t_timeval	tv;
+
+	if (gettimeofday(&tv, NULL))
+		return (ERROR);
+	return (tv.tv_sec * 1000 + tv.tv_usec / 1000);
 }
 
-static int	take_fork(t_philo *arg, t_mutex *fork)
+void	delay(unsigned int ms)
 {
-	pthread_mutex_lock(arg->finish_mutex);
-	if (arg->finish)
+	long int	time;
+	long int	time_quant;
+
+	time = get_curr_time();
+	time_quant = ms / 10 + 1;
+	while (time < ms)
 	{
-		pthread_mutex_unlock(arg->finish_mutex);
-		return (EXIT_THREAD);
+		usleep(time_quant);
+		time += get_curr_time();
 	}
-	pthread_mutex_lock(fork);
-	pthread_mutex_lock(arg->print_mutex);
-	// write fork
-	pthread_mutex_unlock(arg->print_mutex);
-	pthread_mutex_unlock(arg->finish_mutex);
-	return (CONTINUE_THREAD);
 }
 
-static int	eat(t_philo *arg)
+int	print_msg(t_philo *arg, const char *msg)
 {
 	pthread_mutex_lock(arg->finish_mutex);
 	if (arg->finish)
@@ -52,42 +47,9 @@ static int	eat(t_philo *arg)
 		return (EXIT_THREAD);
 	}
 	pthread_mutex_lock(arg->print_mutex);
-	// write eating
-	pthread_mutex_unlock(arg->print_mutex);
-
-	// last eating time
-	// eat_nb--
-
-	pthread_mutex_unlock(arg->finish_mutex);
-	if (delay(arg->time_to_eat))
-	{
-		pthread_mutex_lock(arg->finish_mutex);
-		arg->finish = true;
-		pthread_mutex_unlock(arg->finish_mutex);
-		return (EXIT_THREAD);
-	}
-	return (CONTINUE_THREAD);
-}
-
-static int	sleep(t_philo *arg)
-{
-	pthread_mutex_lock(arg->finish_mutex);
-	if (arg->finish)
-	{
-		pthread_mutex_unlock(arg->finish_mutex);
-		return (EXIT_THREAD);
-	}
-	pthread_mutex_lock(arg->print_mutex);
-	// write sleeping
+	printf("%ld %ud %s", get_curr_time - arg->start_time, arg->philo_id, msg);
 	pthread_mutex_unlock(arg->print_mutex);
 	pthread_mutex_unlock(arg->finish_mutex);
-	if (delay(arg->time_to_sleep))
-	{
-		pthread_mutex_lock(arg->finish_mutex);
-		arg->finish = true;
-		pthread_mutex_unlock(arg->finish_mutex);
-		return (EXIT_THREAD);
-	}
 	return (CONTINUE_THREAD);
 }
 
@@ -96,17 +58,14 @@ void	*philo(void *_arg)
 	t_philo	*arg;
 
 	arg = (t_philo *)_arg;
-	while (1)
-	{
-		if (think(arg))
-			break ;
-		if (take_fork(arg, arg->forks[0]))
-			break ;
-		if (take_fork(arg, arg->forks[1]))
-			break ;
-		if (eat(arg))
-			break ;
-		if (sleep(arg))
-			break ;
-	}
+	while
+	(
+		!think(arg)
+		&& !take_fork(arg, arg->forks[0])
+		&& !take_fork(arg, arg->forks[1])
+		&& !put_fork(arg, arg->forks[1])
+		&& !put_fork(arg, arg->forks[0])
+		&& !eat(arg)
+		&& !sleep(arg)
+	);
 }
