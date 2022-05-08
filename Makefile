@@ -1,4 +1,11 @@
-SRC = main.c ft_atoui.c
+SRC = 				\
+	atoui.c 		\
+	free.c			\
+	init.c			\
+	main.c			\
+	monitor.c		\
+	philo_utils.c	\
+	philo.c utils.c
 OBJ = $(SRC:.c=.o)
 DEP = $(SRC:.c=.d)
 

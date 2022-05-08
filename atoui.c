@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoui.c                                         :+:      :+:    :+:   */
+/*   atoui.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 22:32:09 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/04 23:10:53 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/08 12:38:17 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static long int	ft_str_to_num(const char **str, int *ndigit)
 	return (num);
 }
 
-unsigned int	ft_atoui(const char *str, bool *err)
+unsigned int	atoui(const char *str, bool *err)
 {
 	int			ndigit;
 	long int	num;
