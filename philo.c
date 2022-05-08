@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 16:36:32 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/08 19:29:00 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/08 19:29:58 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ static void	*philo(void *_arg)
 	t_philo	*arg;
 
 	arg = (t_philo *)_arg;
-	if (arg->remain_eat_nb)
 	while
 	(
 		!philo_think(arg)
