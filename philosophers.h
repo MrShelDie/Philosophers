@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 22:09:28 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/08 15:15:20 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/09 01:12:38 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ typedef struct s_philo
 	bool			*finish;
 	t_mutex			*finish_mutex;
 	t_mutex			*last_eating_time_mutex;
+	t_mutex			*eat_nb_mutex;
 	t_mutex			*forks[2];
 	unsigned int	time_to_die;
 	unsigned int	time_to_eat;
@@ -52,7 +53,7 @@ typedef struct s_philo
 	unsigned int	philo_id;
 	long int		last_eating_time;
 	long int		start_time;
-	long int		remain_eat_nb;
+	long int		eat_nb;
 	pthread_t		thread_id;
 }	t_philo;
 
@@ -63,6 +64,7 @@ typedef struct s_prime
 	t_mutex			finish_mutex;
 	t_mutex			*forks;
 	t_mutex			*last_eating_time_mutexes;
+	t_mutex			*eat_nb_mutexes;
 	t_philo			*philos;
 	unsigned int	philo_nb;
 	long int		start_time;

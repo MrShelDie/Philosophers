@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 01:57:41 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/08 19:08:10 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/09 01:16:31 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	philo_think(t_philo *arg)
 {
-	if (arg->remain_eat_nb != UNDEF_EAT_NB && arg->remain_eat_nb <= 0)
+	if (arg->eat_nb != UNDEF_EAT_NB && arg->eat_nb <= 0)
 		return (EXIT_THREAD);
 	if (print_msg(arg, "is thinking\n"))
 		return (EXIT_THREAD);
@@ -57,6 +57,15 @@ int	philo_eat(t_philo *arg)
 		return (EXIT_THREAD);
 	}
 	delay(arg->time_to_eat);
+	pthread_mutex_lock(arg->eat_nb_mutex);
+	if (arg->eat_nb > 0)
+		arg->eat_nb--;
+	if (arg->eat_nb == 0)
+	{
+		pthread_mutex_unlock(arg->eat_nb_mutex);
+		return (EXIT_THREAD);
+	}
+	pthread_mutex_unlock(arg->eat_nb_mutex);
 	return (CONTINUE_THREAD);
 }
 
