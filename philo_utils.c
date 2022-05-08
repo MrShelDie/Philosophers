@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 01:57:41 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/08 14:31:30 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/08 19:08:10 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,13 @@ int	philo_take_fork(t_philo *arg, t_mutex *fork)
 		pthread_mutex_unlock(fork);
 		return (EXIT_THREAD);
 	}
+	if (arg->forks[0] == arg->forks[1])
+	{
+		delay(arg->time_to_die);
+		pthread_mutex_unlock(fork);
+		return (EXIT_THREAD);
+	}
+	pthread_mutex_unlock(fork);
 	return (CONTINUE_THREAD);
 }
 

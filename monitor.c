@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 19:19:06 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/08 14:33:33 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/08 19:10:45 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ static void	*monitor(void *_arg)
 {
 	t_prime		*arg;
 	ssize_t		i;
+	long int	curr_time;
 
 	arg = (t_prime *)_arg;
 	while (true)
@@ -33,15 +34,21 @@ static void	*monitor(void *_arg)
 		while (++i < arg->philo_nb)
 		{
 			pthread_mutex_lock(&arg->last_eating_time_mutexes[i]);
-			if (arg->philos[i].last_eating_time != UNDEF_LAST_EATING_TIME
-				&& get_curr_time() - arg->philos[i].last_eating_time
-				> arg->philos[i].time_to_eat)
+			pthread_mutex_lock(&arg->finish_mutex);
+			curr_time = get_curr_time();
+			if (curr_time - arg->philos[i].last_eating_time
+				> arg->philos[i].time_to_die)
 			{
-				pthread_mutex_lock(&arg->finish_mutex);
-				arg->finish = true;
-				printf("%ld %ld died\n", get_curr_time() - arg->start_time, i);
-				pthread_mutex_unlock(&arg->finish_mutex);
+				if (!arg->finish)
+				{
+					arg->finish = true;
+					printf("%ld %ld died\n", curr_time - arg->start_time, i);
+					pthread_mutex_unlock(&arg->last_eating_time_mutexes[i]);
+					pthread_mutex_unlock(&arg->finish_mutex);
+					return (NULL);
+				}
 			}
+			pthread_mutex_unlock(&arg->finish_mutex);
 			pthread_mutex_unlock(&arg->last_eating_time_mutexes[i]);
 		}
 	}

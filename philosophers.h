@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 22:09:28 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/08 12:49:13 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/08 15:15:20 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@
 # define CONTINUE_THREAD 0
 
 # define UNDEF_EAT_NB -1
-# define UNDEF_LAST_EATING_TIME -1
 
 # define ARGC_WITHOUT_EAT_NB 5
 # define ARGC_WITH_EAT_NB 6

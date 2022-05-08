@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 12:26:31 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/08 12:56:54 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/08 18:53:02 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ int	init_philo(t_parsed_data const *parsed_data, t_prime *prime)
 		philo->forks[i % 2] = &prime->forks[(i + 1) % prime->philo_nb];
 		philo->forks[(i + 1) % 2] = &prime->forks[i];
 		philo->start_time = prime->start_time;
-		philo->last_eating_time = UNDEF_LAST_EATING_TIME;
+		philo->last_eating_time = prime->start_time;
 		philo->last_eating_time_mutex = &prime->last_eating_time_mutexes[i];
 		philo->time_to_die = parsed_data->time_to_die;
 		philo->time_to_eat = parsed_data->time_to_eat;
