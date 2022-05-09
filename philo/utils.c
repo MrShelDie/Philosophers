@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 12:21:20 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/09 15:25:04 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/09 16:51:46 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	delay(unsigned int ms)
 	long int	time_quant;
 
 	start_time = get_curr_time();
-	time_quant = ms / 10 + 1;
+	time_quant = ms / 5 + 1;
 	while (get_curr_time() - start_time < ms)
 		usleep(time_quant);
 }
