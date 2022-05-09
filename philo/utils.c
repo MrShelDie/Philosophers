@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 12:21:20 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/09 18:41:33 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/09 19:11:53 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	delay(unsigned int ms)
 	start_time = get_curr_time();
 	// time_quant = ms / 5 + 1;
 	while (get_curr_time() - start_time < ms)
-		usleep(500);
+		usleep(600);
 }
 
 void	print_msg(t_philo *arg, const char *msg)

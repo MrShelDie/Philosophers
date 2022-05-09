@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 19:19:06 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/09 18:05:22 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/09 18:50:44 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int	check_philo_death(t_prime *prime, ssize_t i)
 	curr_time = get_curr_time();
 	pthread_mutex_lock(&prime->last_eating_time_mutexes[i]);
 	if (curr_time - prime->philos[i].last_eating_time
-		>= prime->philos[i].time_to_die)
+		> prime->philos[i].time_to_die)
 	{
 		pthread_mutex_unlock(&prime->last_eating_time_mutexes[i]);
 		pthread_mutex_lock(&prime->finish_mutex);

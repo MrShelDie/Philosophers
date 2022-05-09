@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 16:36:32 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/09 18:37:01 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/09 19:08:35 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@ static void	*philo(void *_arg)
 			pthread_mutex_unlock(arg->finish_mutex);
 			return (NULL);
 		}
+		pthread_mutex_unlock(arg->finish_mutex);
 		if (arg->eat_nb != UNDEF_EAT_NB && arg->eat_nb <= 0)
 			return (NULL);
-		pthread_mutex_unlock(arg->finish_mutex);
 		philo_take_fork(arg, 0);
 		philo_take_fork(arg, 1);
 		philo_eat(arg);
