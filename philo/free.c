@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 12:28:06 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/09 01:03:52 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/09 17:39:37 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ void	free_prime(t_prime *prime)
 	free_mutexes(&prime->eat_nb_mutexes, prime->philo_nb);
 	if (!prime->finish_mutex_destroyed)
 		pthread_mutex_destroy(&prime->finish_mutex);
+	if (!prime->print_mutex_destroyed)
+		pthread_mutex_destroy(&prime->print_mutex);
 	if (prime->philos)
 	{
 		free(prime->philos);

@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 22:09:28 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/09 15:52:20 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/09 17:53:21 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,9 @@ typedef struct s_parser_data
 typedef struct s_philo
 {
 	bool			*finish;
+	bool			*print;
 	t_mutex			*finish_mutex;
+	t_mutex			*print_mutex;
 	t_mutex			*last_eating_time_mutex;
 	t_mutex			*eat_nb_mutex;
 	t_mutex			*forks[2];
@@ -60,8 +62,11 @@ typedef struct s_philo
 typedef struct s_prime
 {
 	bool			finish;
+	bool			print;
 	bool			finish_mutex_destroyed;
+	bool			print_mutex_destroyed;
 	t_mutex			finish_mutex;
+	t_mutex			print_mutex;
 	t_mutex			*forks;
 	t_mutex			*last_eating_time_mutexes;
 	t_mutex			*eat_nb_mutexes;
@@ -74,12 +79,12 @@ typedef struct s_prime
 unsigned int	atoui(const char *str, bool *err);
 long int		get_curr_time(void);
 void			delay(unsigned int ms);
-int				print_msg(t_philo *arg, const char *msg);
+void			print_msg(t_philo *arg, const char *msg);
 
-int				philo_think(t_philo *arg);
-int				philo_take_fork(t_philo *arg, unsigned int fork_num);
-int				philo_eat(t_philo *arg);
-int				philo_sleep(t_philo *arg);
+void			philo_think(t_philo *arg);
+void			philo_take_fork(t_philo *arg, unsigned int fork_num);
+void			philo_eat(t_philo *arg);
+void			philo_sleep(t_philo *arg);
 
 int				start_philo(t_prime *prime);
 int				start_monitor(t_prime *prime);

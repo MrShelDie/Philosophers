@@ -11,7 +11,7 @@ DEP = $(SRC:.c=.d)
 
 NAME 		= philo
 CC			= gcc
-CFLAGS 		= -Wall -Werror -Wextra -O3
+CFLAGS 		= -Wall -Werror -Wextra -g
 CPPFLAGS 	= -MMD
 
 all:		$(NAME)

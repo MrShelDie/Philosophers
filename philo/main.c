@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 21:55:46 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/09 15:25:21 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/09 17:58:19 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ int	main(int argc, char **argv)
 	}
 	init_prime(&prime, parsed_data.philo_nb);
 	if (init_mutex(&prime.finish_mutex, &prime.finish_mutex_destroyed)
+		|| init_mutex(&prime.print_mutex, &prime.print_mutex_destroyed)
 		|| init_mutexes(&prime.forks, prime.philo_nb)
 		|| init_mutexes(&prime.last_eating_time_mutexes, prime.philo_nb)
 		|| init_mutexes(&prime.eat_nb_mutexes, prime.philo_nb)

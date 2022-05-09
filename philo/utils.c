@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 12:21:20 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/09 16:51:46 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/09 18:41:33 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,18 @@ long int	get_curr_time(void)
 void	delay(unsigned int ms)
 {
 	long int	start_time;
-	long int	time_quant;
+	// long int	time_quant;
 
 	start_time = get_curr_time();
-	time_quant = ms / 5 + 1;
+	// time_quant = ms / 5 + 1;
 	while (get_curr_time() - start_time < ms)
-		usleep(time_quant);
+		usleep(500);
 }
 
-int	print_msg(t_philo *arg, const char *msg)
+void	print_msg(t_philo *arg, const char *msg)
 {
-	if (*arg->finish)
-		return (EXIT_THREAD);
-	printf("%ld %u %s", get_curr_time() - arg->start_time, arg->philo_id, msg);
-	return (CONTINUE_THREAD);
+	pthread_mutex_lock(arg->print_mutex);
+	if (*arg->print)
+		printf("%ld %u %s", get_curr_time() - arg->start_time, arg->philo_id, msg);
+	pthread_mutex_unlock(arg->print_mutex);
 }
