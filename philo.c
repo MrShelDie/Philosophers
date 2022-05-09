@@ -6,9 +6,11 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 16:36:32 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/08 19:29:58 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/09 15:59:15 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include <unistd.h>
 
 #include "philosophers.h"
 
@@ -19,13 +21,11 @@ static void	*philo(void *_arg)
 	arg = (t_philo *)_arg;
 	while
 	(
-		!philo_think(arg)
-		&& !philo_take_fork(arg, arg->forks[0])
-		&& !philo_take_fork(arg, arg->forks[1])
-		&& !philo_put_fork(arg->forks[1])
-		&& !philo_put_fork(arg->forks[0])
+		!philo_take_fork(arg, 0)
+		&& !philo_take_fork(arg, 1)
 		&& !philo_eat(arg)
 		&& !philo_sleep(arg)
+		&& !philo_think(arg)
 	);
 	return (NULL);
 }
@@ -55,6 +55,7 @@ int	start_philo(t_prime *prime)
 {
 	if (create_filos(prime, 0, 2))
 		return (ERROR);
+	usleep(5000);
 	if (create_filos(prime, 1, 2))
 		return (ERROR);
 	return (SUCCESS);

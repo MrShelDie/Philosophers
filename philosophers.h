@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 22:09:28 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/09 01:12:38 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/09 15:52:20 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,7 @@ void			delay(unsigned int ms);
 int				print_msg(t_philo *arg, const char *msg);
 
 int				philo_think(t_philo *arg);
-int				philo_take_fork(t_philo *arg, t_mutex *fork);
-int				philo_put_fork(t_mutex *fork);
+int				philo_take_fork(t_philo *arg, unsigned int fork_num);
 int				philo_eat(t_philo *arg);
 int				philo_sleep(t_philo *arg);
 
