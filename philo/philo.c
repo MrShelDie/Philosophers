@@ -6,13 +6,12 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 16:36:32 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/09 19:08:35 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/11 20:24:10 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "philo.h"
 #include <unistd.h>
-
-#include "philosophers.h"
 
 static void	*philo(void *_arg)
 {

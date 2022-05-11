@@ -6,11 +6,11 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 01:57:41 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/09 19:24:29 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/11 20:24:13 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philosophers.h"
+#include "philo.h"
 
 void	philo_think(t_philo *arg)
 {

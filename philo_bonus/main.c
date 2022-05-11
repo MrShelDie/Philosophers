@@ -5,13 +5,15 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/04 21:55:46 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/11 20:24:26 by gannemar         ###   ########.fr       */
+/*   Created: 2022/05/11 20:22:01 by gannemar          #+#    #+#             */
+/*   Updated: 2022/05/11 21:09:35 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
+#include <stdlib.h>
 #include <stdio.h>
+#include <fcntl.h>
 
 static int	parse(int argc, char *const *argv, t_parsed_data *parsed_data)
 {
@@ -33,42 +35,56 @@ static int	parse(int argc, char *const *argv, t_parsed_data *parsed_data)
 	return (SUCCESS);
 }
 
-static void	join_threads(t_prime *prime)
+static void	philos_destroy(pid_t *philos, unsigned int philo_nb)
 {
 	ssize_t	i;
 
 	i = -1;
-	while (++i < prime->philo_nb)
-		pthread_join(prime->philos[i].thread_id, NULL);
-	pthread_join(prime->monitor, NULL);
+	while (++i < philo_nb)
+		kill(philos[i], SIGKILL);
+	free(philos);
+	philos = NULL;
+}
+
+static int	philo_create(pid_t *philos, unsigned int philo_nb)
+{
+	ssize_t	i;
+
+	philos = (pid_t *)malloc(sizeof(pid_t) * philo_nb);
+	if (!philos)
+		return (ERROR);
+	i = -1;
+	while (++i < philo_nb)
+	{
+		philos[i] = fork();
+		if (philos[i] == -1)
+		{
+			// TODO
+		}
+		else if (philos[i] == 0)
+		{
+			// TODO
+		}
+	}
+	return (SUCCESS);
 }
 
 int	main(int argc, char **argv)
 {
-	t_prime			prime;
 	t_parsed_data	parsed_data;
+	pid_t			*philos;
+	sem_t			*forks;
 
 	if (parse(argc, argv, &parsed_data))
 	{
 		printf("Invalid argument\n");
 		return (0);
 	}
-	init_prime(&prime, parsed_data.philo_nb);
-	if (init_mutex(&prime.finish_mutex, &prime.finish_mutex_destroyed)
-		|| init_mutex(&prime.print_mutex, &prime.print_mutex_destroyed)
-		|| init_mutexes(&prime.forks, prime.philo_nb)
-		|| init_mutexes(&prime.last_eating_time_mutexes, prime.philo_nb)
-		|| init_mutexes(&prime.eat_nb_mutexes, prime.philo_nb)
-		|| init_philo(&parsed_data, &prime)
-		|| start_monitor(&prime)
-		|| start_philo(&prime)
-	)
+	forks = sem_open(SEM_NAME, O_CREAT, 0666, parsed_data.philo_nb);
+	if (forks == SEM_FAILED)
 	{
-		printf("Init error\n");
-		free_prime(&prime);
+		printf("Can't create semaphore\n");
 		return (0);
 	}
-	join_threads(&prime);
-	free_prime(&prime);
 	return (0);
 }
