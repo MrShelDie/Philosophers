@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 01:57:41 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/11 20:24:13 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/12 13:01:12 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,6 @@ void	philo_take_fork(t_philo *arg, unsigned int fork_num)
 
 void	philo_eat(t_philo *arg)
 {
-	// pthread_mutex_lock(arg->last_eating_time_mutex);
-	// arg->last_eating_time = get_curr_time();
-	// pthread_mutex_unlock(arg->last_eating_time_mutex);
 	print_msg(arg, "is eating\n");
 	delay(arg->time_to_eat);
 	pthread_mutex_lock(arg->last_eating_time_mutex);

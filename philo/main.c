@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 21:55:46 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/11 20:24:26 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/12 13:21:20 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	main(int argc, char **argv)
 
 	if (parse(argc, argv, &parsed_data))
 	{
-		printf("Invalid argument\n");
+		write(2, "Invalid argument\n", 17);
 		return (0);
 	}
 	init_prime(&prime, parsed_data.philo_nb);
@@ -64,7 +64,7 @@ int	main(int argc, char **argv)
 		|| start_philo(&prime)
 	)
 	{
-		printf("Init error\n");
+		write(2, "Init error\n", 11);
 		free_prime(&prime);
 		return (0);
 	}
