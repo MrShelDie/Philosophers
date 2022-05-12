@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 15:08:29 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/12 15:11:56 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/12 15:14:20 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,18 @@ static void	philo(t_prime *prime)
 	// TODO
 }
 
-static int	philo_create(t_prime *prime)
+void	philos_destroy(t_prime *prime)
+{
+	ssize_t	i;
+
+	i = -1;
+	while (++i < prime->created_philo_nb)
+		kill(prime->pid_philos[i], SIGKILL);
+	free(prime->pid_philos);
+	prime->pid_philos = NULL;
+}
+
+int	philo_create(t_prime *prime)
 {
 	ssize_t	i;
 
@@ -38,15 +49,4 @@ static int	philo_create(t_prime *prime)
 			philo(prime);
 	}
 	return (SUCCESS);
-}
-
-static void	philos_destroy(t_prime *prime)
-{
-	ssize_t	i;
-
-	i = -1;
-	while (++i < prime->created_philo_nb)
-		kill(prime->pid_philos[i], SIGKILL);
-	free(prime->pid_philos);
-	prime->pid_philos = NULL;
 }
