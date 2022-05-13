@@ -6,12 +6,13 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 21:55:46 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/12 13:21:20 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/13 20:56:29 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-#include <stdio.h>
+#include <unistd.h>
+#include <sys/types.h>
 
 static int	parse(int argc, char *const *argv, t_parsed_data *parsed_data)
 {

@@ -6,11 +6,11 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 22:32:09 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/11 20:24:43 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/13 20:52:12 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 #include <limits.h>
 
 static int	ft_isdigit(int c)

@@ -6,12 +6,13 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 12:28:06 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/11 20:24:38 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/13 20:57:05 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 #include <stdlib.h>
+#include <sys/types.h>
 
 void	free_mutexes(t_mutex **mutexes, unsigned int mutex_nb)
 {

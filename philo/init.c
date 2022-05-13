@@ -6,13 +6,14 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 12:26:31 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/11 20:24:33 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/13 20:56:53 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 #include <string.h>
 #include <stdlib.h>
+#include <sys/types.h>
 
 int	init_mutex(t_mutex *mutex, bool *mutex_destroyed)
 {

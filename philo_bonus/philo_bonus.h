@@ -6,15 +6,13 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 20:22:20 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/12 15:14:22 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/13 20:48:14 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_BONUS_H
 # define PHILO_BONUS_H
 
-# include <signal.h>
-# include <unistd.h>
 # include <stdbool.h>
 # include <semaphore.h>
 

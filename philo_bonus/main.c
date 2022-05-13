@@ -6,15 +6,15 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 20:22:01 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/12 15:08:50 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/13 20:52:04 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
+#include <fcntl.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
-#include <fcntl.h>
+#include <sys/wait.h>
 
 static int	parse(int argc, char *const *argv, t_prime *prime)
 {
@@ -45,6 +45,7 @@ static int	prime_init(t_prime *prime)
 	prime->sem_stdout = sem_open(SEM_STDOUT_NAME, O_CREAT, 0666, 1);
 	if (prime->sem_stdout == SEM_FAILED)
 		return (ERROR);
+	return (SUCCESS);
 }
 
 static void	prime_free(t_prime *prime)

@@ -6,11 +6,13 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 15:08:29 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/12 15:14:20 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/13 20:50:31 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
+#include <signal.h>
+#include <stdlib.h>
 
 static void	philo(t_prime *prime)
 {

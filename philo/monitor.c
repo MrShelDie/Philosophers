@@ -6,12 +6,13 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/07 19:19:06 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/11 20:24:20 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/13 20:55:15 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 #include <stdio.h>
+#include <sys/types.h>
 
 static int	check_philo_death(t_prime *prime, ssize_t i)
 {
