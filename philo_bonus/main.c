@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 20:22:01 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/13 20:52:04 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/14 13:36:14 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include <sys/wait.h>
 
 static int	parse(int argc, char *const *argv, t_prime *prime)
@@ -42,35 +43,44 @@ static int	prime_init(t_prime *prime)
 	prime->sem_forks = sem_open(SEM_FORKS_NAME, O_CREAT, 0666, prime->philo_nb);
 	if (prime->sem_forks == SEM_FAILED)
 		return (ERROR);
-	prime->sem_stdout = sem_open(SEM_STDOUT_NAME, O_CREAT, 0666, 1);
-	if (prime->sem_stdout == SEM_FAILED)
+	prime->sem_print = sem_open(SEM_PRINT_NAME, O_CREAT, 0666, 1);
+	if (prime->sem_print == SEM_FAILED)
 		return (ERROR);
 	return (SUCCESS);
 }
 
 static void	prime_free(t_prime *prime)
 {
-	if (prime->pid_philos)
-		free(prime->pid_philos);
+	philos_destroy(prime);
 	if (prime->sem_forks && prime->sem_forks != SEM_FAILED)
 	{
 		sem_close(prime->sem_forks);
 		sem_unlink(SEM_FORKS_NAME);
 	}
-	if (prime->sem_stdout && prime->sem_stdout != SEM_FAILED)
+	if (prime->sem_print && prime->sem_print != SEM_FAILED)
 	{
-		sem_close(prime->sem_stdout);
-		sem_unlink(SEM_STDOUT_NAME);
+		sem_close(prime->sem_print);
+		sem_unlink(SEM_PRINT_NAME);
 	}
 }
 
-static void	wait_phios(t_prime *prime)
+static void	wait_philos(t_prime *prime)
 {
+	int		status;
 	ssize_t	i;
 
+	status = EXIT_SUCCESS;
 	i = -1;
 	while (++i < prime->created_philo_nb)
-		wait(NULL);
+	{
+		wait(&status);
+		if (status == EXIT_INIT_ERR)
+		{
+			philos_destroy(prime);
+			write(STDERR_FILENO, "Init error\n", 11);
+			return ;
+		}
+	}
 }
 
 int	main(int argc, char **argv)
@@ -79,16 +89,16 @@ int	main(int argc, char **argv)
 
 	if (parse(argc, argv, &prime))
 	{
-		write(2, "Invalid argument\n", 17);
+		write(STDERR_FILENO, "Invalid argument\n", 17);
 		return (0);
 	}
-	if (prime_init(&prime) || philo_create(&prime))
+	if (prime_init(&prime) || philos_create(&prime))
 	{
-		write(2, "Init error\n", 11);
 		prime_free(&prime);
+		write(STDERR_FILENO, "Init error\n", 11);
 		return (0);
 	}
-	wait_phios(&prime);
+	wait_philos(&prime);
 	prime_free(&prime);
 	return (0);
 }
