@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_bonus.h"
 #include <limits.h>
+#include <stdbool.h>
 
 static int	ft_isdigit(int c)
 {
@@ -39,7 +39,7 @@ static	int	ft_get_sign(const char **str)
 	return (0);
 }
 
-static long int	ft_str_to_num(const char **str, int *ndigit)
+static long long int	ft_str_to_num(const char **str, int *ndigit)
 {
 	long int	num;
 
@@ -53,24 +53,24 @@ static long int	ft_str_to_num(const char **str, int *ndigit)
 	return (num);
 }
 
-unsigned int	atoui(const char *str, bool *err)
+int	ft_atoi(const char *str, bool *err)
 {
-	int			ndigit;
-	long int	num;
+	int				is_neg;
+	int				ndigit;
+	long long int	num;
 
 	num = 0;
+	is_neg = 0;
 	ndigit = 0;
 	ft_skip_spaces(&str);
-	if (ft_get_sign(&str) || !ft_isdigit(*str))
-	{
-		*err = true;
-		return (0);
-	}
+	is_neg = ft_get_sign(&str);
 	num = ft_str_to_num(&str, &ndigit);
-	if (*str != '\0' || ndigit > 10 || num > UINT_MAX)
+	if (ndigit > 18 || !is_neg && num > INT_MAX || is_neg && num < INT_MIN)
 	{
 		*err = true;
 		return (0);
 	}
-	return (num);
+	if (is_neg)
+		num *= -1;
+	return ((int)num);
 }

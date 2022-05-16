@@ -34,25 +34,34 @@ typedef struct timeval	t_timeval;
 
 typedef struct s_prime
 {
-	pid_t			*pid_philos;
-	sem_t			*sem_forks;
-	sem_t			*sem_print;
-	unsigned int	time_to_die;
-	unsigned int	time_to_eat;
-	unsigned int	time_to_sleep;
-	unsigned int	philo_id;
-	unsigned int	philo_nb;
-	unsigned int	created_philo_nb;
-	long int		eat_nb;
-	long int		start_time;
-}					t_prime;
+	pid_t		*pid_philos;
 
-unsigned int	atoui(const char *str, bool *err);
+	sem_t		*sem_forks;
+	sem_t		*sem_print;
+	sem_t		**sem_last_eating_time;
 
-int				philos_create(t_prime *prime);
-void			philos_destroy(t_prime *prime);
+	long int	start_time;
+	int			eat_nb;
 
-void			delay(unsigned int ms);
-long int		get_curr_time(void);
+	int			time_to_die;
+	int			time_to_eat;
+	int			time_to_sleep;
+	int			philo_id;
+
+	int			philo_nb;
+	int			created_philo_nb;
+}				t_prime;
+
+int			ft_atoi(const char *str, bool *err);
+
+int			philos_create(t_prime *prime);
+void		philos_destroy(t_prime *prime);
+
+void		delay(unsigned int ms);
+void		print_msg(t_prime *prime, const char *msg);
+long int	get_curr_time(void);
+
+char		*ft_itoa(int n);
+char		*ft_strjoin(char const *s1, char const *s2);
 
 #endif

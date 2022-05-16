@@ -24,22 +24,33 @@ static int	parse(int argc, char *const *argv, t_prime *prime)
 	if (argc != ARGC_WITHOUT_EAT_NB && argc != ARGC_WITH_EAT_NB)
 		return (ERROR);
 	err = false;
-	prime->philo_nb = atoui(argv[1], &err);
-	prime->time_to_die = atoui(argv[2], &err);
-	prime->time_to_eat = atoui(argv[3], &err);
-	prime->time_to_sleep = atoui(argv[4], &err);
+	prime->philo_nb = ft_atoi(argv[1], &err);
+	prime->time_to_die = ft_atoi(argv[2], &err);
+	prime->time_to_eat = ft_atoi(argv[3], &err);
+	prime->time_to_sleep = ft_atoi(argv[4], &err);
 	if (argc == ARGC_WITH_EAT_NB)
-		prime->eat_nb = (long int)atoui(argv[5], &err);
+		prime->eat_nb = ft_atoi(argv[5], &err);
 	else
 		prime->eat_nb = UNDEF_EAT_NB;
-	if (err)
+	if (err || prime->philo_nb <= 0 || prime->time_to_die <= 0
+		|| prime->time_to_eat <= 0 || prime->time_to_sleep <= 0
+		|| (argc == ARGC_WITH_EAT_NB && prime->eat_nb <= 0))
 		return (ERROR);
 	return (SUCCESS);
 }
 
 static int	prime_init(t_prime *prime)
 {
+	ssize_t	i;
+
 	memset(prime, 0, sizeof(t_prime));
+
+	i = -1;
+	while (++i < prime->philo_nb)
+	{
+		
+	}
+
 	prime->sem_forks = sem_open(SEM_FORKS_NAME, O_CREAT, 0666, prime->philo_nb);
 	if (prime->sem_forks == SEM_FAILED)
 		return (ERROR);
@@ -77,7 +88,7 @@ static void	wait_philos(t_prime *prime)
 		if (status == EXIT_INIT_ERR)
 		{
 			philos_destroy(prime);
-			write(STDERR_FILENO, "Init error\n", 11);
+			write(STDERR_FILENO, "\nInit error\n", 12);
 			return ;
 		}
 	}
@@ -89,13 +100,13 @@ int	main(int argc, char **argv)
 
 	if (parse(argc, argv, &prime))
 	{
-		write(STDERR_FILENO, "Invalid argument\n", 17);
+		write(STDERR_FILENO, "\nInvalid argument\n", 18);
 		return (0);
 	}
 	if (prime_init(&prime) || philos_create(&prime))
 	{
 		prime_free(&prime);
-		write(STDERR_FILENO, "Init error\n", 11);
+		write(STDERR_FILENO, "\nInit error\n", 12);
 		return (0);
 	}
 	wait_philos(&prime);
