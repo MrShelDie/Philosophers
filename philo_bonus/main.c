@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 20:22:01 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/17 19:39:27 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/17 20:02:25 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ static void	wait_philos(t_prime *prime)
 
 	if (prime->n_created_philo == 0)
 		return ;
-	ended_first = waitpid(i, &exit_status, 0);
+	ended_first = waitpid(-1, &exit_status, 0);
 	if (exit_status == EXIT_FAILURE)
 	{
 		delay(prime->time_to_die);
@@ -109,13 +109,13 @@ int	main(int argc, char **argv)
 
 	if (parse(argc, argv, &prime))
 	{
-		write(STDERR_FILENO, "\nInvalid argument\n", 18);
+		write(STDERR_FILENO, "Invalid argument\n", 18);
 		return (0);
 	}
 	if (prime_init(&prime) || create_philo_processes(&prime))
 	{
 		prime_free(&prime);
-		write(STDERR_FILENO, "\nInit error\n", 12);
+		write(STDERR_FILENO, "Init error\n", 12);
 		return (0);
 	}
 	wait_philos(&prime);

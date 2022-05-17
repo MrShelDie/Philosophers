@@ -1,21 +1,21 @@
-SRC = 				\
-	atoui.c 		\
-	free.c			\
-	init.c			\
+SRC =				\
+	ft_atoi.c		\
+	ft_itoa.c		\
+	ft_strjoin.c	\
 	main.c			\
-	monitor.c		\
-	philo_utils.c	\
-	philo.c utils.c
+	philo_actions.c	\
+	philo.c			\
+	sem_group.c		\
+	utils.c
 
 OBJ = $(SRC:.c=.o)
 DEP = $(SRC:.c=.d)
 
-NAME 		= philo
-CC			= cc
-CFLAGS 		= -Wall -Werror -Wextra -O3
-CPPFLAGS 	= -MMD
+NAME	= philo_bonus
+CC		= cc
+CFLAGS	= -Wall -Werror -Wextra -O3
 
-all:		$(NAME)
+all:	$(NAME)
 
 $(NAME):	$(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -o $@

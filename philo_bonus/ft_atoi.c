@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   atoui.c                                            :+:      :+:    :+:   */
+/*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 22:32:09 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/13 20:52:12 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/17 19:52:45 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	ft_atoi(const char *str, bool *err)
 	ft_skip_spaces(&str);
 	is_neg = ft_get_sign(&str);
 	num = ft_str_to_num(&str, &ndigit);
-	if (ndigit > 18 || !is_neg && num > INT_MAX || is_neg && num < INT_MIN)
+	if (ndigit > 18 || (!is_neg && num > INT_MAX) || (is_neg && num < INT_MIN))
 	{
 		*err = true;
 		return (0);

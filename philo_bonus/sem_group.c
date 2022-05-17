@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 14:42:09 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/17 15:35:44 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/17 20:00:34 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ char	**generate_unique_names(const char *default_name, size_t nname)
  * @param nsem - number of semaphores in a group
  */
 void	destroy_sem_group(
-			sem_t **sem_group, const char **unique_names, size_t nsem)
+			sem_t **sem_group, char *const *unique_names, size_t nsem)
 {
 	size_t	i;
 
@@ -81,18 +81,18 @@ void	destroy_sem_group(
  * @return sem_t** - if successful, a pointer to the semaphore
  * 		group is returned, in case of an error, NULL is returned.
  */
-sem_t	**create_sem_group(const char **unique_names, size_t nsem, int value)
+sem_t	**create_sem_group(char *const *unique_names, size_t nsem, int value)
 {
 	sem_t	**sem_group;
 	size_t	i;
 
-	sem_group = (sem_t *)malloc(sizeof(sem_t *) * nsem);
+	sem_group = (sem_t **)malloc(sizeof(sem_t *) * nsem);
 	if (!sem_group)
 		return (NULL);
 	i = -1;
 	while (++i < nsem)
 	{
-		sem_group[i] = sem_open(unique_names, O_CREAT, 0666, value);
+		sem_group[i] = sem_open(unique_names[i], O_CREAT, 0666, value);
 		if (sem_group[i] == SEM_FAILED)
 		{
 			destroy_sem_group(sem_group, unique_names, i);

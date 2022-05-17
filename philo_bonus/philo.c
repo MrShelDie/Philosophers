@@ -6,11 +6,12 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 15:08:29 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/17 19:39:59 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/17 19:59:17 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
+#include <stdio.h>
 #include <signal.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -47,7 +48,7 @@ static void	*monitor(void *arg)
 		{
 			sem_post(prime->sem_group_last_eating_time[prime->philo_id]);
 			sem_wait(prime->sem_print);
-			printf("%ld %ld died\n",
+			printf("%ld %d died\n",
 				curr_time - prime->start_time, prime->philo_id);
 			free_philo_proc_data(prime);
 			exit(EXIT_FAILURE);
