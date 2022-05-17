@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 20:22:01 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/17 20:02:25 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/17 20:04:42 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,13 +109,13 @@ int	main(int argc, char **argv)
 
 	if (parse(argc, argv, &prime))
 	{
-		write(STDERR_FILENO, "Invalid argument\n", 18);
+		write(STDERR_FILENO, "Invalid argument\n", 17);
 		return (0);
 	}
 	if (prime_init(&prime) || create_philo_processes(&prime))
 	{
 		prime_free(&prime);
-		write(STDERR_FILENO, "Init error\n", 12);
+		write(STDERR_FILENO, "Init error\n", 11);
 		return (0);
 	}
 	wait_philos(&prime);
