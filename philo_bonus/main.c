@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 20:22:01 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/17 20:04:42 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/18 02:14:10 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ static int	parse(int argc, char *const *argv, t_prime *prime)
 
 static int	prime_init(t_prime *prime)
 {
-	memset(prime, 0, sizeof(t_prime));
 	prime->unique_names_last_eating_time
 		= generate_unique_names(SEM_GROUP_LAST_EATING_TIME, prime->n_philo);
 	if (!prime->unique_names_last_eating_time)
@@ -90,7 +89,7 @@ static void	wait_philos(t_prime *prime)
 	if (prime->n_created_philo == 0)
 		return ;
 	ended_first = waitpid(-1, &exit_status, 0);
-	if (exit_status == EXIT_FAILURE)
+	if (exit_status != EXIT_SUCCESS)
 	{
 		delay(prime->time_to_die);
 		kill_except(prime->pids_philo, prime->n_created_philo, ended_first);
@@ -107,6 +106,7 @@ int	main(int argc, char **argv)
 {
 	t_prime			prime;
 
+	memset(&prime, 0, sizeof(t_prime));
 	if (parse(argc, argv, &prime))
 	{
 		write(STDERR_FILENO, "Invalid argument\n", 17);

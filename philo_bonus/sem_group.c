@@ -6,11 +6,12 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 14:42:09 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/17 20:00:34 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/18 01:01:23 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
+#include <fcntl.h>
 #include <stdlib.h>
 
 /**

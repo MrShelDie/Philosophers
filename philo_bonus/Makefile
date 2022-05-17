@@ -12,8 +12,8 @@ OBJ = $(SRC:.c=.o)
 DEP = $(SRC:.c=.d)
 
 NAME	= philo_bonus
-CC		= cc
-CFLAGS	= -Wall -Werror -Wextra -O3
+CC		= clang
+CFLAGS	= -Wall -Werror -Wextra -g
 
 all:	$(NAME)
 

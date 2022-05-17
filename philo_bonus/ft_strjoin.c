@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strjoint.c                                      :+:      :+:    :+:   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 13:33:11 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/17 13:33:16 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/18 00:39:33 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	new_str = (char *)malloc(sizeof(char) * total_len);
 	if (!new_str)
 		return (NULL);
+	new_str[0] = '\0';
 	ft_strlcpy(new_str, s1, total_len);
 	ft_strlcat(new_str, s2, total_len);
 	return (new_str);
