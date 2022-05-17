@@ -13,7 +13,7 @@ static void	philo_eat(t_prime *prime)
 
 void	philo_loop(t_prime *prime)
 {
-	while (prime->eat_nb != UNDEF_EAT_NB && prime->time_to_eat > 0)
+	while (prime->neat != UNDEF_EAT_NB && prime->time_to_eat > 0)
 	{
 		philo_take_fork(prime);
 		philo_take_fork(prime);

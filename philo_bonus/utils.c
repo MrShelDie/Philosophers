@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 13:43:14 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/14 13:44:22 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/17 15:40:46 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,86 +17,14 @@
 #include <unistd.h>
 #include <sys/time.h>
 
-static char	**malloc_str_arr(size_t nstr, size_t length)
+void	free_strs(char **strs, size_t nstr)
 {
-	char	**strs;
 	size_t	i;
 
-	strs = (char **)malloc(sizeof(char *) * nstr);
-	if (!strs)
-		return (NULL);
-	i = 0;
-	while (i < nstr)
-	{
-		strs[i] = (char *)malloc(sizeof(char) * length);
-
-		i++;
-	}
-}
-
-static char	**generate_sem_names(const char *sem_default_name, int count)
-{
-	// char	*sem_name_numbered;
-	// char	*str_num;
-
-	// str_num = ft_itoa(number);
-	// if (!str_num)
-	// 	return (NULL);
-	// sem_name_numbered = ft_strjoin(sem_name, str_num);
-	// free(str_num);
-	// if (!sem_name_numbered)
-	// 	return (NULL);
-	// return (sem_name_numbered);
-
-	char	**sem_names;
-	int		i;
-
-	sem_names = (char **)malloc(sizeof(char *) * count);
-	if (!sem_names)
-		return (NULL);
 	i = -1;
-	while (++i < count)
-	{
-		
-	}
-
-}
-
-static void delete_sems(const char *sem_name, int cnt)
-{
-	char	*sem_numbered_name;
-
-	while (--cnt >= 0)
-	{
-		
-	}
-}
-
-int	create_sems(const char *sem_name, int cnt, int value)
-{
-	int		i;
-	char	*sem_numbered_name;
-	sem_t	*sem;
-
-	i = -1;
-	while (++i < cnt)
-	{
-		sem_numbered_name = generate_sem_names(sem_name, i);
-		if (!sem_numbered_name)
-		{
-			// TODO
-		}
-		sem = sem_open(sem_numbered_name, O_CREAT, 0666, value);
-		if (sem == SEM_FAILED)
-		{
-			free(sem_numbered_name);
-			// TODO
-		}
-		// TODO
-		sem_close(sem);
-	}
-	// TODO free
-	return (SUCCESS);
+	while (++i < nstr)
+		free(strs[i]);
+	free(strs);
 }
 
 long int	get_curr_time(void)
