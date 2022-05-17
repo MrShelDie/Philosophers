@@ -6,16 +6,30 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 13:43:14 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/17 15:40:46 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/17 19:28:32 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 #include <fcntl.h>
 #include <stdio.h>
+#include <signal.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/time.h>
+
+void	kill_except(pid_t *pids, size_t n_pids, pid_t pid_except)
+{
+	size_t	i;
+
+	i = -1;
+	while (++i < n_pids)
+	{
+		if (pids[i] == pid_except)
+			continue ;
+		kill(pids[i], SIGKILL);
+	}
+}
 
 void	free_strs(char **strs, size_t nstr)
 {
