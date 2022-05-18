@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 20:22:01 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/18 02:14:10 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/18 13:13:20 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,32 +52,27 @@ static int	prime_init(t_prime *prime)
 	prime->sem_forks = sem_open(SEM_FORKS, O_CREAT, 0666, prime->n_philo);
 	if (prime->sem_forks == SEM_FAILED)
 		return (ERROR);
+	sem_unlink(SEM_FORKS);
 	prime->sem_print = sem_open(SEM_PRINT, O_CREAT, 0666, 1);
 	if (prime->sem_print == SEM_FAILED)
 		return (ERROR);
+	sem_unlink(SEM_PRINT);
 	return (SUCCESS);
 }
 
 static void	prime_free(t_prime *prime)
 {
-	destroy_philo_processes(prime);
+	destroy_philos(prime);
 	if (prime->unique_names_last_eating_time
 		&& prime->sem_group_last_eating_time
 	)
-		destroy_sem_group(prime->sem_group_last_eating_time,
-			prime->unique_names_last_eating_time, prime->n_philo);
+		destroy_sem_group(prime->sem_group_last_eating_time, prime->n_philo);
 	if (prime->unique_names_last_eating_time)
 		free_strs(prime->unique_names_last_eating_time, prime->n_philo);
 	if (prime->sem_forks && prime->sem_forks != SEM_FAILED)
-	{
 		sem_close(prime->sem_forks);
-		sem_unlink(SEM_FORKS);
-	}
 	if (prime->sem_print && prime->sem_print != SEM_FAILED)
-	{
 		sem_close(prime->sem_print);
-		sem_unlink(SEM_PRINT);
-	}
 }
 
 static void	wait_philos(t_prime *prime)
@@ -112,7 +107,7 @@ int	main(int argc, char **argv)
 		write(STDERR_FILENO, "Invalid argument\n", 17);
 		return (0);
 	}
-	if (prime_init(&prime) || create_philo_processes(&prime))
+	if (prime_init(&prime) || create_philos(&prime))
 	{
 		prime_free(&prime);
 		write(STDERR_FILENO, "Init error\n", 11);

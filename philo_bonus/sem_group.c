@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 14:42:09 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/18 01:01:23 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/18 13:11:59 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,28 +52,24 @@ char	**generate_unique_names(const char *default_name, size_t nname)
 }
 
 /**
- * @brief Closes and destroys a group of semaphores
+ * @brief Closes a group of semaphores
  * 
  * @param sem_group - array of semaphores to be closed
- * @param unique_names - Array of unique names for each
- * 		semaphore from the semaphore group
  * @param nsem - number of semaphores in a group
  */
 void	destroy_sem_group(
-			sem_t **sem_group, char *const *unique_names, size_t nsem)
+			sem_t **sem_group, size_t nsem)
 {
 	size_t	i;
 
 	i = -1;
 	while (++i < nsem)
-	{
 		sem_close(sem_group[i]);
-		sem_unlink(unique_names[i]);
-	}
 }
 
 /**
- * @brief Creates and opens a group of semaphore objects
+ * @brief Creates and opens a group of semaphore objects.
+ * 		Upon completion of the process, the semaphores are removed from the system
  * 
  * @param unique_names - Array of unique names for each
  * 		semaphore from the semaphore group
@@ -96,9 +92,10 @@ sem_t	**create_sem_group(char *const *unique_names, size_t nsem, int value)
 		sem_group[i] = sem_open(unique_names[i], O_CREAT, 0666, value);
 		if (sem_group[i] == SEM_FAILED)
 		{
-			destroy_sem_group(sem_group, unique_names, i);
+			destroy_sem_group(sem_group, i);
 			return (NULL);
 		}
+		sem_unlink(unique_names[i]);
 	}
 	return (sem_group);
 }

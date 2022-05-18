@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 15:08:29 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/17 19:59:17 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/18 13:22:38 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,7 @@ static void	free_philo_proc_data(t_prime *prime)
 	if (prime->unique_names_last_eating_time
 		&& prime->sem_group_last_eating_time
 	)
-		destroy_sem_group(prime->sem_group_last_eating_time,
-			prime->unique_names_last_eating_time, prime->n_philo);
+		destroy_sem_group(prime->sem_group_last_eating_time, prime->n_philo);
 	if (prime->unique_names_last_eating_time)
 		free_strs(prime->unique_names_last_eating_time, prime->n_philo);
 	if (prime->pids_philo)
@@ -77,6 +76,8 @@ static void	philo(t_prime *prime)
 		philo_eat(prime);
 		if (prime->n_eat == 0)
 		{
+			sem_post(prime->sem_forks);
+			sem_post(prime->sem_forks);
 			free_philo_proc_data(prime);
 			exit(EXIT_SUCCESS);
 		}
@@ -85,7 +86,7 @@ static void	philo(t_prime *prime)
 	}
 }
 
-void	destroy_philo_processes(t_prime *prime)
+void	destroy_philos(t_prime *prime)
 {
 	ssize_t	i;
 
@@ -99,24 +100,35 @@ void	destroy_philo_processes(t_prime *prime)
 	prime->pids_philo = NULL;
 }
 
-int	create_philo_processes(t_prime *prime)
+int	create_half_philos(t_prime *prime, size_t *i)
 {
-	ssize_t	i;
+	while (*i < (size_t)prime->n_philo / 2 + 1)
+	{
+		prime->n_created_philo++;
+		prime->philo_id = *i;
+		prime->pids_philo[*i] = fork();
+		if (prime->pids_philo[*i] == -1)
+			return (ERROR);
+		else if (prime->pids_philo[*i] == 0)
+			philo(prime);
+		(*i)++;
+	}
+	return (SUCCESS);
+}
+
+int	create_philos(t_prime *prime)
+{
+	size_t	i;
 
 	prime->pids_philo = (pid_t *)malloc(sizeof(pid_t) * prime->n_philo);
 	if (!prime->pids_philo)
 		return (ERROR);
 	prime->start_time = get_curr_time();
-	i = -1;
-	while (++i < prime->n_philo)
-	{
-		prime->n_created_philo = i;
-		prime->philo_id = i;
-		prime->pids_philo[i] = fork();
-		if (prime->pids_philo[i] == -1)
-			return (ERROR);
-		else if (prime->pids_philo[i] == 0)
-			philo(prime);
-	}
+	prime->last_eating_time = prime->start_time;
+	i = 0;
+	if (create_half_philos(prime, &i))
+		return (ERROR);
+	if (create_half_philos(prime, &i))
+		return (ERROR);
 	return (SUCCESS);
 }

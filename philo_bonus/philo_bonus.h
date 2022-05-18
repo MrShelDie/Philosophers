@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 20:22:20 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/17 19:57:38 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/18 13:13:03 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,13 +54,12 @@ typedef struct s_prime
 	int			n_created_philo;
 }				t_prime;
 
-int			create_philo_processes(t_prime *prime);
-void		destroy_philo_processes(t_prime *prime);
+int			create_philos(t_prime *prime);
+void		destroy_philos(t_prime *prime);
 
 sem_t		**create_sem_group(
 				char *const *unique_names, size_t nsem, int value);
-void		destroy_sem_group(
-				sem_t **sem_group, char *const *unique_names, size_t nsem);
+void		destroy_sem_group(sem_t **sem_group, size_t nsem);
 char		**generate_unique_names(const char *default_name, size_t nname);
 
 void		delay(unsigned int ms);
