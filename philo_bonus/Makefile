@@ -12,7 +12,7 @@ OBJ = $(SRC:.c=.o)
 DEP = $(SRC:.c=.d)
 
 NAME	= philo_bonus
-CFLAGS	= -Wall -Werror -Wextra -g
+CFLAGS	= -Wall -Werror -Wextra -O3
 
 all:	$(NAME)
 

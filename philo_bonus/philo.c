@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 15:08:29 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/21 17:49:54 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/21 19:23:38 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,10 @@
 
 static void	free_philo_proc_data(t_prime *prime)
 {
+	if (prime->sem_group_last_eating_time)
+		free(prime->sem_group_last_eating_time);
+	if (prime->sem_group_kill_philo)
+		free(prime->sem_group_kill_philo);
 	if (prime->unique_names_last_eating_time)
 		free_strs(prime->unique_names_last_eating_time, prime->n_philo);
 	if (prime->unique_names_kill_philo)
@@ -49,7 +53,7 @@ static void	*monitor(void *arg)
 			exit(EXIT_FAILURE);
 		}
 		sem_post(prime->sem_group_last_eating_time[prime->philo_id]);
-		usleep(100);
+		usleep(1000);
 	}
 	return (NULL);
 }
