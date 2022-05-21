@@ -11,7 +11,6 @@ OBJ = $(SRC:.c=.o)
 DEP = $(SRC:.c=.d)
 
 NAME 		= philo
-CC			= clang
 CFLAGS 		= -Wall -Werror -Wextra -O3
 CPPFLAGS 	= -MMD
 

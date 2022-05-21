@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 15:08:29 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/18 13:22:38 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/21 17:49:54 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,12 @@
 
 static void	free_philo_proc_data(t_prime *prime)
 {
-	if (prime->unique_names_last_eating_time
-		&& prime->sem_group_last_eating_time
-	)
-		destroy_sem_group(prime->sem_group_last_eating_time, prime->n_philo);
 	if (prime->unique_names_last_eating_time)
 		free_strs(prime->unique_names_last_eating_time, prime->n_philo);
+	if (prime->unique_names_kill_philo)
+		free_strs(prime->unique_names_kill_philo, prime->n_philo);
 	if (prime->pids_philo)
 		free(prime->pids_philo);
-	if (prime->sem_forks && prime->sem_forks != SEM_FAILED)
-		sem_close(prime->sem_forks);
-	if (prime->sem_print && prime->sem_print != SEM_FAILED)
-		sem_close(prime->sem_print);
 }
 
 static void	*monitor(void *arg)
@@ -45,14 +39,17 @@ static void	*monitor(void *arg)
 		curr_time = get_curr_time();
 		if (curr_time - prime->last_eating_time > prime->time_to_die)
 		{
-			sem_post(prime->sem_group_last_eating_time[prime->philo_id]);
 			sem_wait(prime->sem_print);
 			printf("%ld %d died\n",
 				curr_time - prime->start_time, prime->philo_id);
+			sem_post(prime->sem_group_last_eating_time[prime->philo_id]);
+			sem_wait(prime->sem_group_kill_philo[prime->philo_id]);
+			sem_post(prime->sem_group_kill_philo[prime->philo_id]);
 			free_philo_proc_data(prime);
 			exit(EXIT_FAILURE);
 		}
 		sem_post(prime->sem_group_last_eating_time[prime->philo_id]);
+		usleep(100);
 	}
 	return (NULL);
 }
@@ -61,6 +58,7 @@ static void	philo(t_prime *prime)
 {
 	pthread_t	thread_monitor;
 
+	sem_wait(prime->sem_group_kill_philo[prime->philo_id]);
 	if (pthread_create(&thread_monitor, NULL, monitor, prime))
 	{
 		sem_wait(prime->sem_print);
@@ -69,51 +67,44 @@ static void	philo(t_prime *prime)
 		exit(EXIT_FAILURE);
 	}
 	pthread_detach(thread_monitor);
-	while (1)
+	sem_post(prime->sem_group_kill_philo[prime->philo_id]);
+	while (prime->n_eat != 0)
 	{
-		philo_take_fork(prime);
-		philo_take_fork(prime);
 		philo_eat(prime);
-		if (prime->n_eat == 0)
-		{
-			sem_post(prime->sem_forks);
-			sem_post(prime->sem_forks);
-			free_philo_proc_data(prime);
-			exit(EXIT_SUCCESS);
-		}
 		philo_sleep(prime);
 		philo_think(prime);
 	}
+	free_philo_proc_data(prime);
+	exit(EXIT_SUCCESS);
 }
 
-void	destroy_philos(t_prime *prime)
+void	wait_philos(t_prime *prime)
 {
+	int		exit_status;
 	ssize_t	i;
 
-	if (!prime->pids_philo)
+	if (!prime->pids_philo || prime->n_created_philo == 0)
 		return ;
-	i = -1;
-	while (++i < prime->n_created_philo)
-		kill(prime->pids_philo[i], SIGKILL);
-	prime->n_created_philo = 0;
-	free(prime->pids_philo);
-	prime->pids_philo = NULL;
-}
-
-int	create_half_philos(t_prime *prime, size_t *i)
-{
-	while (*i < (size_t)prime->n_philo / 2 + 1)
+	waitpid(-1, &exit_status, 0);
+	if (exit_status != EXIT_SUCCESS)
 	{
-		prime->n_created_philo++;
-		prime->philo_id = *i;
-		prime->pids_philo[*i] = fork();
-		if (prime->pids_philo[*i] == -1)
-			return (ERROR);
-		else if (prime->pids_philo[*i] == 0)
-			philo(prime);
-		(*i)++;
+		kill_all(prime->pids_philo, prime->n_created_philo,
+			prime->sem_group_kill_philo);
+		wait_remain(1, prime->n_created_philo);
+		return ;
 	}
-	return (SUCCESS);
+	i = 0;
+	while (++i < prime->n_created_philo)
+	{
+		waitpid(-1, &exit_status, 0);
+		if (exit_status != EXIT_SUCCESS)
+		{
+			kill_all(prime->pids_philo, prime->n_created_philo,
+				prime->sem_group_kill_philo);
+			wait_remain(i + 1, prime->n_created_philo);
+			return ;
+		}
+	}
 }
 
 int	create_philos(t_prime *prime)
@@ -125,10 +116,16 @@ int	create_philos(t_prime *prime)
 		return (ERROR);
 	prime->start_time = get_curr_time();
 	prime->last_eating_time = prime->start_time;
-	i = 0;
-	if (create_half_philos(prime, &i))
-		return (ERROR);
-	if (create_half_philos(prime, &i))
-		return (ERROR);
+	i = -1;
+	while (++i < (size_t)prime->n_philo)
+	{
+		prime->n_created_philo++;
+		prime->philo_id = i;
+		prime->pids_philo[i] = fork();
+		if (prime->pids_philo[i] == -1)
+			return (ERROR);
+		else if (prime->pids_philo[i] == 0)
+			philo(prime);
+	}
 	return (SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 20:22:20 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/18 13:13:03 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/21 16:47:06 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,10 @@
 
 # define SEM_FORKS "/forks"
 # define SEM_PRINT "/print"
-# define SEM_GROUP_LAST_EATING_TIME "/last_eating_time_"
+# define SEM_EATING_PHILO "/eating_philo"
 # define SEM_GROUP_N_EAT "/n_eat_"
+# define SEM_GROUP_KILL_PHILO "/kill_philo_"
+# define SEM_GROUP_LAST_EATING_TIME "/last_eating_time_"
 
 typedef struct timeval	t_timeval;
 
@@ -37,8 +39,11 @@ typedef struct s_prime
 
 	sem_t		*sem_forks;
 	sem_t		*sem_print;
+	sem_t		*sem_eating_philo;
+	sem_t		**sem_group_kill_philo;
 	sem_t		**sem_group_last_eating_time;
 
+	char		**unique_names_kill_philo;
 	char		**unique_names_last_eating_time;
 
 	long int	start_time;
@@ -55,7 +60,7 @@ typedef struct s_prime
 }				t_prime;
 
 int			create_philos(t_prime *prime);
-void		destroy_philos(t_prime *prime);
+void		wait_philos(t_prime *prime);
 
 sem_t		**create_sem_group(
 				char *const *unique_names, size_t nsem, int value);
@@ -65,7 +70,8 @@ char		**generate_unique_names(const char *default_name, size_t nname);
 void		delay(unsigned int ms);
 void		free_strs(char **strs, size_t nstr);
 void		print_msg(t_prime *prime, const char *msg);
-void		kill_except(pid_t *pids, size_t n_pids, pid_t pid_except);
+void		kill_all(pid_t *pids, size_t n_pids, sem_t **sem_group_kill_philo);
+void		wait_remain(size_t n_ended_proc, size_t n_proc_to_wait);
 long int	get_curr_time(void);
 
 int			ft_atoi(const char *str, bool *err);

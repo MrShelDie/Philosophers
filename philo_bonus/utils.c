@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/14 13:43:14 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/17 19:28:32 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/21 16:42:11 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,28 @@
 #include <unistd.h>
 #include <sys/time.h>
 
-void	kill_except(pid_t *pids, size_t n_pids, pid_t pid_except)
+void	kill_all(pid_t *pids, size_t n_pids, sem_t **sem_group_kill_philo)
 {
 	size_t	i;
 
 	i = -1;
 	while (++i < n_pids)
 	{
-		if (pids[i] == pid_except)
-			continue ;
+		sem_wait(sem_group_kill_philo[i]);
 		kill(pids[i], SIGKILL);
+		sem_post(sem_group_kill_philo[i]);
+	}
+}
+
+void	wait_remain(size_t n_ended_proc, size_t n_total_proc)
+{
+	size_t	i;
+
+	i = n_ended_proc;
+	while (i < n_total_proc)
+	{
+		waitpid(-1, NULL, 0);
+		i++;
 	}
 }
 
@@ -55,7 +67,7 @@ void	delay(unsigned int ms)
 
 	start_time = get_curr_time();
 	while (get_curr_time() - start_time < ms)
-		usleep(600);
+		usleep(500);
 }
 
 void	print_msg(t_prime *prime, const char *msg)
