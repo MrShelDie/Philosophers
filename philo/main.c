@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 21:55:46 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/17 14:15:32 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/22 13:47:49 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,16 +54,7 @@ int	main(int argc, char **argv)
 		write(2, "Invalid argument\n", 17);
 		return (0);
 	}
-	init_prime(&prime, parsed_data.philo_nb);
-	if (init_mutex(&prime.finish_mutex, &prime.finish_mutex_destroyed)
-		|| init_mutex(&prime.print_mutex, &prime.print_mutex_destroyed)
-		|| init_mutexes(&prime.forks, prime.philo_nb)
-		|| init_mutexes(&prime.last_eating_time_mutexes, prime.philo_nb)
-		|| init_mutexes(&prime.eat_nb_mutexes, prime.philo_nb)
-		|| init_philo(&parsed_data, &prime)
-		|| start_monitor(&prime)
-		|| start_philo(&prime)
-	)
+	if (init_prime(&parsed_data, &prime))
 	{
 		write(2, "Init error\n", 11);
 		free_prime(&prime);

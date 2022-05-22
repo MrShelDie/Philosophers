@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 14:42:09 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/21 18:26:01 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/22 13:24:46 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
  * @return char** - On success, a pointer to an array of names
  * 		is returned, on error, NULL is returned.
  */
-char	**generate_unique_names(const char *default_name, size_t nname)
+char	**gen_unames(const char *default_name, size_t nname)
 {
 	char	**unique_names;
 	char	*unique_name;

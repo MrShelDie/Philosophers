@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 12:26:31 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/13 20:56:53 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/22 13:47:59 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,43 +55,59 @@ int	init_mutexes(t_mutex **mutexes, unsigned int mutex_nb)
 	return (SUCCESS);
 }
 
-int	init_philo(t_parsed_data const *parsed_data, t_prime *prime)
+static void	init_philo(t_parsed_data const *parsed_data,
+	t_prime *prime, int philo_nb)
+{
+	t_philo		*philo;
+
+	philo = &prime->philos[philo_nb];
+	philo->finish = &prime->finish;
+	philo->finish_mutex = &prime->finish_mutex;
+	philo->print = &prime->print;
+	philo->print_mutex = &prime->print_mutex;
+	philo->eat_nb_mutex = &prime->eat_nb_mutexes[philo_nb];
+	philo->forks[0] = &prime->forks[philo_nb];
+	philo->forks[1] = &prime->forks[(philo_nb + 1) % prime->philo_nb];
+	philo->start_time = prime->start_time;
+	philo->last_eating_time = prime->start_time;
+	philo->last_eating_time_mutex = &prime->last_eating_time_mutexes[philo_nb];
+	philo->time_to_die = parsed_data->time_to_die;
+	philo->time_to_eat = parsed_data->time_to_eat;
+	philo->time_to_sleep = parsed_data->time_to_sleep;
+	philo->philo_id = (unsigned int)philo_nb;
+	philo->eat_nb = parsed_data->eat_nb;
+}
+
+int	init_philos(t_parsed_data const *parsed_data, t_prime *prime)
 {
 	long int	i;
-	t_philo		*philo;
 
 	prime->philos = (t_philo *)malloc(sizeof(t_philo) * prime->philo_nb);
 	if (!prime->philos)
 		return (ERROR);
 	i = -1;
 	while (++i < prime->philo_nb)
-	{
-		philo = &prime->philos[i];
-		philo->finish = &prime->finish;
-		philo->finish_mutex = &prime->finish_mutex;
-		philo->print = &prime->print;
-		philo->print_mutex = &prime->print_mutex;
-		philo->eat_nb_mutex = &prime->eat_nb_mutexes[i];
-		philo->forks[0] = &prime->forks[i];
-		philo->forks[1] = &prime->forks[(i + 1) % prime->philo_nb];
-		philo->start_time = prime->start_time;
-		philo->last_eating_time = prime->start_time;
-		philo->last_eating_time_mutex = &prime->last_eating_time_mutexes[i];
-		philo->time_to_die = parsed_data->time_to_die;
-		philo->time_to_eat = parsed_data->time_to_eat;
-		philo->time_to_sleep = parsed_data->time_to_sleep;
-		philo->philo_id = (unsigned int)i;
-		philo->eat_nb = parsed_data->eat_nb;
-	}
+		init_philo(parsed_data, prime, i);
 	return (SUCCESS);
 }
 
-void	init_prime(t_prime *prime, unsigned int philo_nb)
+int	init_prime(t_parsed_data const *parsed_data, t_prime *prime)
 {
 	memset(prime, 0, sizeof(*prime));
 	prime->finish_mutex_destroyed = true;
 	prime->print_mutex_destroyed = true;
 	prime->print = true;
-	prime->philo_nb = philo_nb;
+	prime->philo_nb = parsed_data->philo_nb;
 	prime->start_time = get_curr_time();
+	if (init_mutex(&prime->finish_mutex, &prime->finish_mutex_destroyed)
+		|| init_mutex(&prime->print_mutex, &prime->print_mutex_destroyed)
+		|| init_mutexes(&prime->forks, prime->philo_nb)
+		|| init_mutexes(&prime->last_eating_time_mutexes, prime->philo_nb)
+		|| init_mutexes(&prime->eat_nb_mutexes, prime->philo_nb)
+		|| init_philos(parsed_data, prime)
+		|| start_monitor(prime)
+		|| start_philo(prime)
+	)
+		return (ERROR);
+	return (SUCCESS);
 }

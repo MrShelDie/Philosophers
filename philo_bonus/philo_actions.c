@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/17 16:27:46 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/21 16:53:26 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/22 13:24:52 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ void	philo_eat(t_prime *prime)
 	philo_take_fork(prime);
 	philo_take_fork(prime);
 	sem_post(prime->sem_eating_philo);
-	sem_wait(prime->sem_group_last_eating_time[prime->philo_id]);
+	sem_wait(prime->sem_group_let[prime->philo_id]);
 	prime->last_eating_time = get_curr_time();
-	sem_post(prime->sem_group_last_eating_time[prime->philo_id]);
+	sem_post(prime->sem_group_let[prime->philo_id]);
 	print_msg(prime, "is eating\n");
 	delay(prime->time_to_eat);
 	if (prime->n_eat > 0)

@@ -1,4 +1,5 @@
 SRC =				\
+	finish_proc.c	\
 	ft_atoi.c		\
 	ft_itoa.c		\
 	ft_strjoin.c	\

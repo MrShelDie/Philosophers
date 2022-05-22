@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 22:09:28 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/13 20:53:52 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/22 13:48:12 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,10 +88,10 @@ void			philo_sleep(t_philo *arg);
 int				start_philo(t_prime *prime);
 int				start_monitor(t_prime *prime);
 
+int				init_prime(t_parsed_data const *parsed_data, t_prime *prime);
 int				init_mutex(t_mutex *mutex, bool *mutex_destroyed);
 int				init_mutexes(t_mutex **mutexes, unsigned int mutex_nb);
-int				init_philo(t_parsed_data const *parsed_data, t_prime *prime);
-void			init_prime(t_prime *prime, unsigned int philo_nb);
+int				init_philos(t_parsed_data const *parsed_data, t_prime *prime);
 
 void			free_prime(t_prime *prime);
 void			free_mutexes(t_mutex **mutexes, unsigned int mutex_nb);

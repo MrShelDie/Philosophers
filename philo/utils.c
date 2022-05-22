@@ -6,14 +6,14 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 12:21:20 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/13 20:53:10 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/22 13:33:33 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-#include <sys/time.h>
-#include <unistd.h>
 #include <stdio.h>
+#include <unistd.h>
+#include <sys/time.h>
 
 long int	get_curr_time(void)
 {

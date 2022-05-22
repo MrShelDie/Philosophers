@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 20:22:01 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/21 18:30:45 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/22 13:28:03 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,23 +39,28 @@ static int	parse(int argc, char *const *argv, t_prime *prime)
 	return (SUCCESS);
 }
 
+static int	init_sem_groups(t_prime *prime)
+{
+	prime->unames_let = gen_unames(SEM_GROUP_LET, prime->n_philo);
+	if (!prime->unames_let)
+		return (ERROR);
+	prime->sem_group_let
+		= create_sem_group(prime->unames_let, prime->n_philo, 1);
+	if (!prime->sem_group_let)
+		return (ERROR);
+	prime->unames_kill = gen_unames(SEM_GROUP_KILL, prime->n_philo);
+	if (!prime->unames_kill)
+		return (ERROR);
+	prime->sem_group_kill
+		= create_sem_group(prime->unames_kill, prime->n_philo, 1);
+	if (!prime->sem_group_kill)
+		return (ERROR);
+	return (SUCCESS);
+}
+
 static int	prime_init(t_prime *prime)
 {
-	prime->unique_names_last_eating_time
-		= generate_unique_names(SEM_GROUP_LAST_EATING_TIME, prime->n_philo);
-	if (!prime->unique_names_last_eating_time)
-		return (ERROR);
-	prime->sem_group_last_eating_time = create_sem_group(
-			prime->unique_names_last_eating_time, prime->n_philo, 1);
-	if (!prime->sem_group_last_eating_time)
-		return (ERROR);
-	prime->unique_names_kill_philo
-		= generate_unique_names(SEM_GROUP_KILL_PHILO, prime->n_philo);
-	if (!prime->unique_names_kill_philo)
-		return (ERROR);
-	prime->sem_group_kill_philo = create_sem_group(
-			prime->unique_names_kill_philo, prime->n_philo, 1);
-	if (!prime->sem_group_kill_philo)
+	if (init_sem_groups(prime))
 		return (ERROR);
 	prime->sem_forks = sem_open(SEM_FORKS, O_CREAT, 0666, prime->n_philo);
 	if (prime->sem_forks == SEM_FAILED)
@@ -75,22 +80,22 @@ static int	prime_init(t_prime *prime)
 
 static void	prime_free(t_prime *prime)
 {
-	if (prime->unique_names_last_eating_time
-		&& prime->sem_group_last_eating_time)
+	if (prime->unames_let
+		&& prime->sem_group_let)
 	{
-		destroy_sem_group(prime->sem_group_last_eating_time, prime->n_philo);
-		free(prime->sem_group_last_eating_time);
+		destroy_sem_group(prime->sem_group_let, prime->n_philo);
+		free(prime->sem_group_let);
 	}
-	if (prime->unique_names_last_eating_time)
-		free_strs(prime->unique_names_last_eating_time, prime->n_philo);
-	if (prime->unique_names_kill_philo
-		&& prime->sem_group_kill_philo)
+	if (prime->unames_let)
+		free_strs(prime->unames_let, prime->n_philo);
+	if (prime->unames_kill
+		&& prime->sem_group_kill)
 	{
-		destroy_sem_group(prime->sem_group_kill_philo, prime->n_philo);
-		free(prime->sem_group_kill_philo);
+		destroy_sem_group(prime->sem_group_kill, prime->n_philo);
+		free(prime->sem_group_kill);
 	}
-	if (prime->unique_names_kill_philo)
-		free_strs(prime->unique_names_kill_philo, prime->n_philo);
+	if (prime->unames_kill)
+		free_strs(prime->unames_kill, prime->n_philo);
 	if (prime->sem_forks && prime->sem_forks != SEM_FAILED)
 		sem_close(prime->sem_forks);
 	if (prime->sem_print && prime->sem_print != SEM_FAILED)
