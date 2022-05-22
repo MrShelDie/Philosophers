@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 22:32:09 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/11 20:24:43 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/22 14:02:11 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ unsigned int	atoui(const char *str, bool *err)
 		return (0);
 	}
 	num = ft_str_to_num(&str, &ndigit);
-	if (*str != '\0' || ndigit > 10 || num > UINT_MAX)
+	if (*str != '\0' || ndigit > 10 || num > INT_MAX)
 	{
 		*err = true;
 		return (0);

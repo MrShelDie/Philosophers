@@ -12,8 +12,9 @@ SRC =				\
 OBJ = $(SRC:.c=.o)
 DEP = $(SRC:.c=.d)
 
-NAME	= philo_bonus
-CFLAGS	= -Wall -Werror -Wextra -O3
+NAME		= philo_bonus
+CFLAGS		= -Wall -Werror -Wextra -O3
+CPPFLAGS	= -MMD
 
 all:	$(NAME)
 

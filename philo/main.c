@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 21:55:46 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/22 13:47:49 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/22 14:23:33 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,9 @@ static int	parse(int argc, char *const *argv, t_parsed_data *parsed_data)
 		parsed_data->eat_nb = (long int)atoui(argv[5], &err);
 	else
 		parsed_data->eat_nb = UNDEF_EAT_NB;
-	if (err)
+	if (err || parsed_data->philo_nb <= 0 || parsed_data->time_to_die <= 0
+		|| parsed_data->time_to_eat <= 0 || parsed_data->time_to_sleep <= 0
+		|| (argc == ARGC_WITH_EAT_NB && parsed_data->eat_nb <= 0))
 		return (ERROR);
 	return (SUCCESS);
 }
@@ -56,8 +58,9 @@ int	main(int argc, char **argv)
 	}
 	if (init_prime(&parsed_data, &prime))
 	{
-		write(2, "Init error\n", 11);
+		join_threads(&prime);
 		free_prime(&prime);
+		write(2, "Init error\n", 11);
 		return (0);
 	}
 	join_threads(&prime);

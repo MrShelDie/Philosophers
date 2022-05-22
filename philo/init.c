@@ -6,7 +6,7 @@
 /*   By: gannemar <gannemar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/08 12:26:31 by gannemar          #+#    #+#             */
-/*   Updated: 2022/05/22 13:47:59 by gannemar         ###   ########.fr       */
+/*   Updated: 2022/05/22 14:24:22 by gannemar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,7 @@ int	init_philos(t_parsed_data const *parsed_data, t_prime *prime)
 	prime->philos = (t_philo *)malloc(sizeof(t_philo) * prime->philo_nb);
 	if (!prime->philos)
 		return (ERROR);
+	memset(prime->philos, 0, sizeof(t_philo) * prime->philo_nb);
 	i = -1;
 	while (++i < prime->philo_nb)
 		init_philo(parsed_data, prime, i);
